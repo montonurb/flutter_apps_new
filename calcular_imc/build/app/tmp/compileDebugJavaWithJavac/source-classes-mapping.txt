@@ -1,0 +1,4 @@
+io/flutter/plugins/GeneratedPluginRegistrant.java
+ io.flutter.plugins.GeneratedPluginRegistrant
+com/montonurb/calcularimc/calcular_imc/BuildConfig.java
+ com.montonurb.calcularimc.calcular_imc.BuildConfig
