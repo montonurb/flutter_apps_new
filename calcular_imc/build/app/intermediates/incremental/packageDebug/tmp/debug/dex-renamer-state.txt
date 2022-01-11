@@ -1,4 +1,4 @@
-#Mon Jan 10 14:41:01 BRT 2022
-base.0=/home/montonurb/Documentos/development/calcular_imc/build/app/intermediates/dex/debug/mergeDexDebug/classes.dex
+#Tue Jan 11 13:53:06 BRT 2022
+base.0=/home/montonurb/Documentos/development/new_apps_flutter/calcular_imc/build/app/intermediates/dex/debug/mergeDexDebug/classes.dex
 renamed.0=classes.dex
 path.0=classes.dex
