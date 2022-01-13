@@ -12,7 +12,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  TextEditingController tarefaController = TextEditingController();
+  final tarefaController = TextEditingController();
 
   List _toDoList = [];
 
@@ -34,6 +34,15 @@ class _HomePageState extends State<HomePage> {
     } catch (e) {
       return "Error!";
     }
+  }
+
+  void _addToDo() {
+    Map<String, dynamic> newToDo = Map();
+    newToDo["title"] = tarefaController.text;
+    tarefaController.text = "";
+    newToDo["done"] = false;
+    _toDoList.add(newToDo);
+    setState(() {});
   }
 
   @override
@@ -60,12 +69,15 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: _addToDo,
                     style: TextButton.styleFrom(
                       backgroundColor: Colors.blueAccent,
                       primary: Colors.cyan,
                     ),
-                    child: Text("ADD"),
+                    child: Text(
+                      "ADD",
+                      style: TextStyle(color: Colors.white),
+                    ),
                   )
                 ],
               ),
@@ -77,13 +89,15 @@ class _HomePageState extends State<HomePage> {
                 itemBuilder: (context, index) {
                   return CheckboxListTile(
                     secondary: CircleAvatar(
-                      child: Icon(_toDoList[index]["checked"]
-                          ? Icons.check
-                          : Icons.error),
+                      child: Icon(
+                          _toDoList[index]["done"] ? Icons.check : Icons.error),
                     ),
                     title: Text(_toDoList[index]["title"]),
                     value: _toDoList[index]["done"],
-                    onChanged: null,
+                    onChanged: (check) {
+                      _toDoList[index]["done"] = check;
+                      setState(() {});
+                    },
                   );
                 },
               ),
