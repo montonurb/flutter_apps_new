@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, prefer_collection_literals, prefer_final_fields
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, prefer_collection_literals, prefer_final_fields, prefer_void_to_null, curly_braces_in_flow_control_structures
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
@@ -38,6 +38,21 @@ class _HomePageState extends State<HomePage> {
     _saveData();
   }
 
+  Future<Null> _refresh() async {
+    await Future.delayed(Duration(seconds: 1));
+    _toDoList.sort((a, b) {
+      if (a["done"] && !b["done"])
+        return 1;
+      else if (!a["done"] && b["done"])
+        return -1;
+      else
+        return 0;
+    });
+    _saveData();
+    setState(() {});
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,22 +65,26 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             children: [
               Container(
-                padding: EdgeInsets.fromLTRB(17, 1, 7, 1),
+                padding: EdgeInsets.fromLTRB(17, 1, 17, 1),
                 child: Row(
                   children: [
                     Expanded(
-                      child: TextFormField(
-                        controller: tarefaController,
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return "Informa a tarefa!";
-                          } else {}
-                        },
-                        decoration: InputDecoration(
-                            labelText: "Nova Tarefa:",
-                            labelStyle: TextStyle(
-                              color: Colors.blueAccent,
-                            )),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        //padding: const EdgeInsets.only(right: 25),
+                        child: TextFormField(
+                          controller: tarefaController,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Informa a tarefa!";
+                            } else {}
+                          },
+                          decoration: InputDecoration(
+                              labelText: "Nova Tarefa:",
+                              labelStyle: TextStyle(
+                                color: Colors.blueAccent,
+                              )),
+                        ),
                       ),
                     ),
                     ElevatedButton(
@@ -87,10 +106,13 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               Expanded(
-                child: ListView.builder(
-                  padding: EdgeInsets.all(10),
-                  itemCount: _toDoList.length,
-                  itemBuilder: buildItem,
+                child: RefreshIndicator(
+                  onRefresh: _refresh,
+                  child: ListView.builder(
+                    padding: EdgeInsets.all(10),
+                    itemCount: _toDoList.length,
+                    itemBuilder: buildItem,
+                  ),
                 ),
               )
             ],
@@ -105,9 +127,23 @@ class _HomePageState extends State<HomePage> {
         color: Colors.red,
         child: Align(
           alignment: Alignment(-0.9, 0.0),
-          child: Icon(
-            Icons.delete,
-            color: Colors.white,
+          child: Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 8),
+                child: Icon(
+                  Icons.delete,
+                  color: Colors.white,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 8),
+                child: Text(
+                  "Excluir",
+                  style: TextStyle(color: Colors.white),
+                ),
+              )
+            ],
           ),
         ),
       ),
@@ -139,7 +175,7 @@ class _HomePageState extends State<HomePage> {
                 _saveData();
                 setState(() {});
               }),
-          duration: Duration(seconds: 2),
+          duration: Duration(seconds: 5),
         );
         ScaffoldMessenger.of(context).showSnackBar(snack);
       },
