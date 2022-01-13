@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, prefer_collection_literals, prefer_final_fields
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
@@ -12,9 +12,139 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final tarefaController = TextEditingController();
 
   List _toDoList = [];
+  Map<String, dynamic> _lastRemoved = Map();
+  late int _lastRemovedPos;
+
+  @override
+  void initState() {
+    super.initState();
+    _readData().then((data) {
+      _toDoList = jsonDecode(data);
+      setState(() {});
+    });
+  }
+
+  void _addToDo() {
+    Map<String, dynamic> newToDo = Map();
+    newToDo["title"] = tarefaController.text;
+    tarefaController.text = "";
+    newToDo["done"] = false;
+    _toDoList.add(newToDo);
+    setState(() {});
+    _saveData();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: Text("Lista de Tarefas"),
+          centerTitle: true,
+        ),
+        body: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              Container(
+                padding: EdgeInsets.fromLTRB(17, 1, 7, 1),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextFormField(
+                        controller: tarefaController,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return "Informa a tarefa!";
+                          } else {}
+                        },
+                        decoration: InputDecoration(
+                            labelText: "Nova Tarefa:",
+                            labelStyle: TextStyle(
+                              color: Colors.blueAccent,
+                            )),
+                      ),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          _addToDo();
+                        }
+                      },
+                      style: TextButton.styleFrom(
+                        backgroundColor: Colors.blueAccent,
+                        primary: Colors.cyan,
+                      ),
+                      child: Text(
+                        "ADD",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              Expanded(
+                child: ListView.builder(
+                  padding: EdgeInsets.all(10),
+                  itemCount: _toDoList.length,
+                  itemBuilder: buildItem,
+                ),
+              )
+            ],
+          ),
+        ));
+  }
+
+  Widget buildItem(context, index) {
+    return Dismissible(
+      key: Key(DateTime.now().millisecondsSinceEpoch.toString()),
+      background: Container(
+        color: Colors.red,
+        child: Align(
+          alignment: Alignment(-0.9, 0.0),
+          child: Icon(
+            Icons.delete,
+            color: Colors.white,
+          ),
+        ),
+      ),
+      direction: DismissDirection.startToEnd,
+      child: CheckboxListTile(
+        secondary: CircleAvatar(
+          child: Icon(_toDoList[index]["done"] ? Icons.check : Icons.error),
+        ),
+        title: Text(_toDoList[index]["title"]),
+        value: _toDoList[index]["done"],
+        onChanged: (check) {
+          _toDoList[index]["done"] = check;
+          _saveData();
+          setState(() {});
+        },
+      ),
+      onDismissed: (direction) {
+        _lastRemoved = Map.from(_toDoList[index]);
+        _lastRemovedPos = index;
+        _toDoList.removeAt(index);
+        _saveData();
+        setState(() {});
+        final snack = SnackBar(
+          content: Text("Tarefa \"${_lastRemoved["title"]}\" removida."),
+          action: SnackBarAction(
+              label: "Desfazer",
+              onPressed: () {
+                _toDoList.insert(_lastRemovedPos, _lastRemoved);
+                _saveData();
+                setState(() {});
+              }),
+          duration: Duration(seconds: 2),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snack);
+      },
+    );
+  }
 
   Future<File> _getFile() async {
     final directory = await getApplicationSupportDirectory();
@@ -34,75 +164,5 @@ class _HomePageState extends State<HomePage> {
     } catch (e) {
       return "Error!";
     }
-  }
-
-  void _addToDo() {
-    Map<String, dynamic> newToDo = Map();
-    newToDo["title"] = tarefaController.text;
-    tarefaController.text = "";
-    newToDo["done"] = false;
-    _toDoList.add(newToDo);
-    setState(() {});
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: Text("Lista de Tarefas"),
-          centerTitle: true,
-        ),
-        body: Column(
-          children: [
-            Container(
-              padding: EdgeInsets.fromLTRB(17, 1, 7, 1),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: tarefaController,
-                      decoration: InputDecoration(
-                          labelText: "Nova Tarefa:",
-                          labelStyle: TextStyle(
-                            color: Colors.blueAccent,
-                          )),
-                    ),
-                  ),
-                  ElevatedButton(
-                    onPressed: _addToDo,
-                    style: TextButton.styleFrom(
-                      backgroundColor: Colors.blueAccent,
-                      primary: Colors.cyan,
-                    ),
-                    child: Text(
-                      "ADD",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  )
-                ],
-              ),
-            ),
-            Expanded(
-              child: ListView.builder(
-                padding: EdgeInsets.all(10),
-                itemCount: _toDoList.length,
-                itemBuilder: (context, index) {
-                  return CheckboxListTile(
-                    secondary: CircleAvatar(
-                      child: Icon(
-                          _toDoList[index]["done"] ? Icons.check : Icons.error),
-                    ),
-                    title: Text(_toDoList[index]["title"]),
-                    value: _toDoList[index]["done"],
-                    onChanged: (check) {
-                      _toDoList[index]["done"] = check;
-                      setState(() {});
-                    },
-                  );
-                },
-              ),
-            )
-          ],
-        ));
   }
 }
