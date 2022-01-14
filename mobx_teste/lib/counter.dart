@@ -1,19 +1,19 @@
 // ignore_for_file: prefer_final_fields
 
 import 'package:mobx/mobx.dart';
+part 'counter.g.dart';
 
-class Counter {
-  Counter() {
-    increment = Action(_increment);
-  }
+class Counter = _Counter with _$Counter;
 
-  Observable _count = Observable(0);
+abstract class _Counter with Store {
+  @observable
+  int count = 0;
 
-  int get count => _count.value;
+  @observable
+  String phrase = "Count: ";
 
-  Action increment;
-
-  void _increment() {
-    _count.value++;
+  @action
+  void increment() {
+    count++;
   }
 }
