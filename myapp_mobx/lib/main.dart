@@ -24,8 +24,7 @@ class _MyAppMobxState extends State<MyAppMobx> {
       home: LoginPage(),
       theme: ThemeData(
         elevatedButtonTheme: ElevatedButtonThemeData(
-          style:
-              TextButton.styleFrom(backgroundColor: Colors.purpleAccent[700]),
+          style: TextButton.styleFrom(backgroundColor: Colors.deepPurpleAccent),
         ),
       ),
     );

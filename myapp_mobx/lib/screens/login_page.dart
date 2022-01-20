@@ -23,7 +23,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.purpleAccent[700],
+        backgroundColor: Colors.deepPurpleAccent,
         body: Center(
           child: SizedBox(
             height: MediaQuery.of(context).size.height * 0.3,
@@ -44,7 +44,7 @@ class _LoginPageState extends State<LoginPage> {
                       hint: "E-mail",
                       prefix: Icon(
                         Icons.account_circle,
-                        color: Colors.purpleAccent[700],
+                        color: Colors.deepPurpleAccent,
                         size: 32,
                       ),
                       onChanged: (email) {},
@@ -56,7 +56,7 @@ class _LoginPageState extends State<LoginPage> {
                       hint: "Senha",
                       prefix: Icon(
                         Icons.lock,
-                        color: Colors.purpleAccent[700],
+                        color: Colors.deepPurpleAccent,
                         size: 32,
                       ),
                       suffix: CustomIconButton(
