@@ -1,21 +1,24 @@
 // ignore_for_file: prefer_const_constructors, must_be_immutable, prefer_final_fields, prefer_const_constructors_in_immutables, avoid_print
 
 import 'package:flutter/material.dart';
+import 'package:myapp_mobx/screens/list_screen.dart';
 import 'package:myapp_mobx/widgets/custom_icon_button.dart';
 import 'package:myapp_mobx/widgets/custom_text_field.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({Key key}) : super(key: key);
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({Key key}) : super(key: key);
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginScreenState extends State<LoginScreen> {
   TextEditingController userController = TextEditingController();
   TextEditingController passController = TextEditingController();
 
   void _logar() {
+    Navigator.of(context)
+        .pushReplacement(MaterialPageRoute(builder: (context) => ListScreen()));
     print("Logando");
   }
 

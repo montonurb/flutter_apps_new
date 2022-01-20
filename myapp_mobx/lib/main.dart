@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 
-import 'screens/login_page.dart';
+import 'screens/login_screen.dart';
 
 void main() {
   runApp(MyAppMobx());
@@ -21,7 +21,7 @@ class _MyAppMobxState extends State<MyAppMobx> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: "MyApp Mobx",
-      home: LoginPage(),
+      home: LoginScreen(),
       theme: ThemeData(
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: TextButton.styleFrom(backgroundColor: Colors.deepPurpleAccent),
