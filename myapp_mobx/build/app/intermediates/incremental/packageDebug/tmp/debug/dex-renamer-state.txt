@@ -1,4 +1,4 @@
-#Fri Jan 21 14:57:00 BRT 2022
+#Fri Jan 21 18:46:04 BRT 2022
 base.0=C\:\\Users\\monto\\Documents\\Development\\flutter_apps_new\\myapp_mobx\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\classes.dex
 renamed.0=classes.dex
 path.0=classes.dex
