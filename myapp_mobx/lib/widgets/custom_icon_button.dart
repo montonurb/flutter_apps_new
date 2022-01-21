@@ -15,7 +15,7 @@ class CustomIconButton extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          child: Icon(iconData),
+          child: Icon(iconData, color: Colors.deepPurpleAccent),
           onTap: onTap,
         ),
       ),

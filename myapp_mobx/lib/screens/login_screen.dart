@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mobx/mobx.dart';
 import 'package:myapp_mobx/screens/list_screen.dart';
 import 'package:myapp_mobx/stores/login_store.dart';
 import 'package:myapp_mobx/widgets/custom_icon_button.dart';
@@ -19,11 +20,21 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController passController = TextEditingController();
 
   LoginStore loginStore = LoginStore();
+  ReactionDisposer disposer;
 
-  void _logar() {
-    Navigator.of(context)
-        .pushReplacement(MaterialPageRoute(builder: (context) => ListScreen()));
-    print("Logando");
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    disposer = reaction(
+      (_) => loginStore.loggedIn,
+      (loggedIn) {
+        if (loginStore.loggedIn) {
+          Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => ListScreen()));
+        }
+      },
+    );
   }
 
   @override
@@ -45,35 +56,41 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    CustomTextField(
-                      obscure: false,
-                      controller: userController,
-                      hint: "E-mail",
-                      prefix: Icon(
-                        Icons.account_circle,
-                        color: Colors.deepPurpleAccent,
-                        size: 32,
-                      ),
-                      onChanged: loginStore.setEmail,
-                      enabled: true,
-                    ),
-                    CustomTextField(
-                      obscure: true,
-                      controller: passController,
-                      hint: "Senha",
-                      prefix: Icon(
-                        Icons.lock,
-                        color: Colors.deepPurpleAccent,
-                        size: 32,
-                      ),
-                      suffix: CustomIconButton(
-                        radius: 32,
-                        iconData: Icons.visibility,
-                        onTap: () {},
-                      ),
-                      onChanged: loginStore.setPassword,
-                      enabled: true,
-                    ),
+                    Observer(builder: (_) {
+                      return CustomTextField(
+                        obscure: false,
+                        controller: userController,
+                        hint: "E-mail",
+                        prefix: Icon(
+                          Icons.account_circle,
+                          color: Colors.deepPurpleAccent,
+                          size: 32,
+                        ),
+                        onChanged: loginStore.setEmail,
+                        enabled: !loginStore.loading,
+                      );
+                    }),
+                    Observer(builder: (_) {
+                      return CustomTextField(
+                        obscure: !loginStore.showPassword,
+                        controller: passController,
+                        hint: "Senha",
+                        prefix: Icon(
+                          Icons.lock,
+                          color: Colors.deepPurpleAccent,
+                          size: 32,
+                        ),
+                        suffix: CustomIconButton(
+                          radius: 32,
+                          iconData: loginStore.showPassword
+                              ? Icons.visibility_off
+                              : Icons.visibility,
+                          onTap: loginStore.setShowPassword,
+                        ),
+                        onChanged: loginStore.setPassword,
+                        enabled: !loginStore.loading,
+                      );
+                    }),
                     Observer(
                       builder: (_) {
                         return ElevatedButton(
@@ -82,8 +99,13 @@ class _LoginScreenState extends State<LoginScreen> {
                               textStyle: TextStyle(fontSize: 16),
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(30))),
-                          onPressed: loginStore.isFormValid ? () {} : null,
-                          child: Text("Logar"),
+                          onPressed: loginStore.loginPressed,
+                          child: loginStore.loading
+                              ? CircularProgressIndicator(
+                                  valueColor:
+                                      AlwaysStoppedAnimation(Colors.white),
+                                )
+                              : Text("Logar"),
                         );
                       },
                     ),
@@ -95,5 +117,11 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    disposer();
+    super.dispose();
   }
 }
