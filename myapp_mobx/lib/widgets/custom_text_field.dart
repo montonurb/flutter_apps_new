@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 
 class CustomTextField extends StatelessWidget {
@@ -34,6 +36,7 @@ class CustomTextField extends StatelessWidget {
         onChanged: onChanged,
         enabled: enabled,
         decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(horizontal: 16),
           hintText: hint,
           border: InputBorder.none,
           prefixIcon: prefix,

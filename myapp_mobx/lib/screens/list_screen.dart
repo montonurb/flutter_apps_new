@@ -1,6 +1,7 @@
-// ignore_for_file: prefer_const_constructors, must_be_immutable, prefer_const_constructors_in_immutables
+// ignore_for_file: prefer_const_constructors, must_be_immutable, prefer_const_constructors_in_immutables, unnecessary_string_interpolations
 
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:myapp_mobx/screens/login_screen.dart';
 import 'package:myapp_mobx/stores/list_store.dart';
 import 'package:myapp_mobx/widgets/custom_icon_button.dart';
@@ -61,28 +62,33 @@ class _ListScreenState extends State<ListScreen> {
                     padding: EdgeInsets.all(16),
                     child: Column(
                       children: [
-                        CustomTextField(
-                          obscure: false,
-                          hint: "Tarefa",
-                          onChanged: listStore.setNewTodoTitle,
-                          suffix: CustomIconButton(
-                            radius: 32,
-                            iconData: Icons.add,
-                            onTap: () {},
-                          ),
-                        ),
+                        Observer(builder: (_) {
+                          return CustomTextField(
+                            obscure: false,
+                            hint: "Tarefa",
+                            onChanged: listStore.setNewTodoTitle,
+                            suffix: CustomIconButton(
+                              radius: 32,
+                              iconData:
+                                  listStore.isFormValid ? Icons.add : null,
+                              onTap: listStore.addTodo,
+                            ),
+                          );
+                        }),
                         Expanded(
-                          child: ListView.separated(
-                            itemCount: 10,
-                            itemBuilder: (context, index) {
-                              return ListTile(
-                                title: Text("Item $index"),
-                              );
-                            },
-                            separatorBuilder: (context, index) {
-                              return Divider();
-                            },
-                          ),
+                          child: Observer(builder: (_) {
+                            return ListView.separated(
+                              itemCount: listStore.todoList.length,
+                              itemBuilder: (context, index) {
+                                return ListTile(
+                                  title: Text('${listStore.todoList[index]}'),
+                                );
+                              },
+                              separatorBuilder: (context, index) {
+                                return Divider();
+                              },
+                            );
+                          }),
                         )
                       ],
                     ),
