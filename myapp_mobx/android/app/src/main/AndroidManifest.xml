@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.montonurb.myappmobx.myapp_mobx">
    <application
-        android:label="myapp_mobx"
+        android:label="Lista de Tarefas com MobX"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
