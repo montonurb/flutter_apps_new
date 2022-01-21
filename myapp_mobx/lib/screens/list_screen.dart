@@ -1,16 +1,20 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, must_be_immutable, prefer_const_constructors_in_immutables
 
 import 'package:flutter/material.dart';
 import 'package:myapp_mobx/screens/login_screen.dart';
+import 'package:myapp_mobx/stores/list_store.dart';
+import 'package:myapp_mobx/widgets/custom_icon_button.dart';
+import 'package:myapp_mobx/widgets/custom_text_field.dart';
 
 class ListScreen extends StatefulWidget {
-  const ListScreen({Key key}) : super(key: key);
+  ListScreen({Key key}) : super(key: key);
 
   @override
   _ListScreenState createState() => _ListScreenState();
 }
 
 class _ListScreenState extends State<ListScreen> {
+  ListStore listStore = ListStore();
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -47,6 +51,42 @@ class _ListScreenState extends State<ListScreen> {
                       },
                     ),
                   ],
+                ),
+              ),
+              Expanded(
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16)),
+                  child: Padding(
+                    padding: EdgeInsets.all(16),
+                    child: Column(
+                      children: [
+                        CustomTextField(
+                          obscure: false,
+                          hint: "Tarefa",
+                          onChanged: listStore.setNewTodoTitle,
+                          suffix: CustomIconButton(
+                            radius: 32,
+                            iconData: Icons.add,
+                            onTap: () {},
+                          ),
+                        ),
+                        Expanded(
+                          child: ListView.separated(
+                            itemCount: 10,
+                            itemBuilder: (context, index) {
+                              return ListTile(
+                                title: Text("Item $index"),
+                              );
+                            },
+                            separatorBuilder: (context, index) {
+                              return Divider();
+                            },
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
                 ),
               ),
             ],

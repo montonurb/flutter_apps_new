@@ -72,8 +72,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     }),
                     Observer(builder: (_) {
                       return CustomTextField(
-                        obscure: !loginStore.showPassword,
                         controller: passController,
+                        obscure: !loginStore.showPassword,
                         hint: "Senha",
                         prefix: Icon(
                           Icons.lock,

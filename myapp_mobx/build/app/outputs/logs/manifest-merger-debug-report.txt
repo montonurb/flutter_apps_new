@@ -46,7 +46,7 @@ MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\mo
 	android:appComponentFactory
 		ADDED from [androidx.core:core:1.6.0] C:\Users\monto\.gradle\caches\transforms-2\files-2.1\5f663b08eec19eef9a9d1af662d9025e\core-1.6.0\AndroidManifest.xml:24:18-86
 	android:label
-		ADDED from C:\Users\monto\Documents\Development\flutter_apps_new\myapp_mobx\android\app\src\main\AndroidManifest.xml:4:9-35
+		ADDED from C:\Users\monto\Documents\Development\flutter_apps_new\myapp_mobx\android\app\src\main\AndroidManifest.xml:4:9-50
 	android:icon
 		ADDED from C:\Users\monto\Documents\Development\flutter_apps_new\myapp_mobx\android\app\src\main\AndroidManifest.xml:5:9-43
 activity#com.montonurb.myappmobx.myapp_mobx.MainActivity

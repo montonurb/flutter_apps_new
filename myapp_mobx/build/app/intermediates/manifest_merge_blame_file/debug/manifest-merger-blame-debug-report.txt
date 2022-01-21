@@ -22,8 +22,8 @@
 18        android:debuggable="true"
 19        android:icon="@mipmap/ic_launcher"
 19-->C:\Users\monto\Documents\Development\flutter_apps_new\myapp_mobx\android\app\src\main\AndroidManifest.xml:5:9-43
-20        android:label="myapp_mobx" >
-20-->C:\Users\monto\Documents\Development\flutter_apps_new\myapp_mobx\android\app\src\main\AndroidManifest.xml:4:9-35
+20        android:label="Lista de Tarefas com MobX" >
+20-->C:\Users\monto\Documents\Development\flutter_apps_new\myapp_mobx\android\app\src\main\AndroidManifest.xml:4:9-50
 21        <activity
 21-->C:\Users\monto\Documents\Development\flutter_apps_new\myapp_mobx\android\app\src\main\AndroidManifest.xml:6:9-34:20
 22            android:name="com.montonurb.myappmobx.myapp_mobx.MainActivity"
